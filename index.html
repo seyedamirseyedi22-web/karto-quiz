@@ -54,6 +54,11 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:18px}
 </header>
 
 <section class="card" id="quiz">
+  <p class="small" style="background:#f8f4ef;border:1px solid #e7e2dc;border-radius:10px;padding:9px 12px;margin:0 0 14px">
+    برای بهبود آموزش‌های کارتو، شروع آزمون و نتیجه نهایی به‌صورت ناشناس ثبت می‌شود؛
+    نام، شماره تماس و اطلاعات هویتی دریافت نمی‌شود.
+  </p>
+
   <div class="qnum" id="qnum">سؤال ۱ از ۵</div>
   <div class="progressline"><div id="progress"></div></div>
   <h2 id="question"></h2>
@@ -80,10 +85,46 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:18px}
   <a class="cta" href="https://ble.ir/karto_hr" target="_blank" rel="noopener">ورود به کانال کارتو</a>
   <p class="small" style="color:#d4dcdf">ble.ir/karto_hr</p>
 </section>
-<footer>این آزمون جنبه آموزشی دارد. برای تصمیم‌گیری در پرونده‌های واقعی، متن قانون و مقررات جاری را بررسی کنید.</footer>
+<footer>این آزمون جنبه آموزشی دارد. برای تصمیم‌گیری در پرونده‌های واقعی، متن قانون و مقررات جاری را بررسی کنید. آمار آزمون به‌صورت ناشناس و برای تحلیل آموزشی ثبت می‌شود.</footer>
 </div>
 
 <script>
+
+// --- KARTO anonymous quiz analytics ---
+// After deploying the Google Apps Script, paste its Web App URL below.
+const KARTO_ANALYTICS_URL = "https://script.google.com/macros/s/AKfycbx4raCJznuMNKtjHTnAGX7Pwjgk26xhGGgBGFf_ymbMysaa6EtJcW5j3bpzw5ZN-Jrggg/exec";
+const KARTO_SESSION_KEY = "karto_quiz_session_v1";
+
+function kartoSessionId(){
+  let id = sessionStorage.getItem(KARTO_SESSION_KEY);
+  if(!id){
+    id = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() :
+      ("k-" + Date.now() + "-" + Math.random().toString(36).slice(2));
+    sessionStorage.setItem(KARTO_SESSION_KEY, id);
+  }
+  return id;
+}
+function kartoTrack(payload){
+  if(!KARTO_ANALYTICS_URL || KARTO_ANALYTICS_URL.includes("PASTE_APPS_SCRIPT")){
+    console.warn("KARTO analytics is not connected yet.");
+    return;
+  }
+  const body = new URLSearchParams();
+  body.set("payload", JSON.stringify({
+    ...payload,
+    sessionId: kartoSessionId(),
+    page: "karto-labor-law-quiz"
+  }));
+  // no-cors avoids cross-origin preflight; the endpoint records data in Google Sheets.
+  fetch(KARTO_ANALYTICS_URL, {method:"POST", mode:"no-cors", body})
+    .catch(err => console.warn("KARTO analytics send failed:", err));
+}
+if(!sessionStorage.getItem("karto_started_v1")){
+  sessionStorage.setItem("karto_started_v1","1");
+  kartoTrack({event:"start"});
+}
+// --- End analytics ---
+
 const questions = [
  {q:"ساعات کار قانونی کارگران در شرایط عادی، حداکثر چند ساعت در هفته است؟",
   o:["۴۰ ساعت","۴۴ ساعت","۴۸ ساعت","۴۲ ساعت"],a:1,
@@ -121,6 +162,18 @@ function render(){
 function updateButtons(){$("next").disabled=answers[current]===null}
 function finish(){
  const score=answers.reduce((n,a,i)=>n+(a===questions[i].a?1:0),0);
+ kartoTrack({
+  event:"complete",
+  score:score,
+  total:questions.length,
+  answers:answers.map((answer,i)=>({
+    question:i+1,
+    selected:answer,
+    selectedText:questions[i].o[answer],
+    correctIndex:questions[i].a,
+    isCorrect:answer===questions[i].a
+  }))
+ });
  $("quiz").classList.add("hidden");$("result").classList.remove("hidden");
  $("score").textContent=`${score} از ۵`;
  $("message").textContent=score===5?"عالی! پاسخ‌های شما کاملاً صحیح بود.":score>=3?"خوب است؛ با مرور توضیحات می‌توانید تسلط خود را بیشتر کنید.":"این آزمون فرصت خوبی برای مرور نکات مهم قانون کار است.";
