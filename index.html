@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="آزمون تخصصی قانون کار کارتو؛ پنج سؤال کاربردی درباره ساعات کار، اضافه‌کاری، مرخصی، شب‌کاری و تعطیل هفتگی.">
+<title>چالش تخصصی قانون کار | KARTO کارتو</title>
+<style>
+:root{--ink:#202833;--muted:#66717d;--paper:#f5f3ef;--card:#fff;--accent:#c66b3d;--accent2:#263c4a;--line:#e7e2dc;--good:#247a54;--bad:#b44747}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:Tahoma,Arial,sans-serif;line-height:1.9}
+.wrap{max-width:760px;margin:0 auto;padding:26px 16px 50px}
+header{background:linear-gradient(135deg,#263c4a,#405968);color:#fff;border-radius:22px;padding:28px 25px;margin-bottom:20px;position:relative;overflow:hidden}
+header:after{content:"";position:absolute;width:190px;height:190px;border:1px solid #ffffff25;border-radius:50%;left:-55px;top:-80px}
+.brand{font-size:13px;letter-spacing:2px;color:#f1c5a8;font-weight:bold}
+h1{font-size:clamp(25px,5vw,36px);line-height:1.5;margin:8px 0}
+header p{color:#e4e9eb;margin:8px 0 0}
+.pill{display:inline-block;background:#ffffff18;border:1px solid #ffffff35;border-radius:30px;padding:3px 12px;font-size:12px;margin-top:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;margin:16px 0;box-shadow:0 8px 28px #263c4a0a}
+.progressline{height:7px;background:#eee9e3;border-radius:20px;overflow:hidden;margin:12px 0 22px}
+#progress{height:100%;width:0;background:var(--accent);transition:width .25s}
+.qnum{font-size:12px;color:var(--accent);font-weight:bold}
+h2{font-size:19px;line-height:1.7;margin:5px 0 16px}
+.option{display:flex;align-items:flex-start;gap:11px;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:9px 0;cursor:pointer;transition:.15s}
+.option:hover{border-color:var(--accent);background:#fffaf7}
+.option input{margin-top:7px;accent-color:var(--accent);transform:scale(1.15)}
+.option:has(input:checked){border-color:var(--accent);background:#fff6f0}
+button,.cta{font-family:inherit;font-size:15px;font-weight:bold;border:0;border-radius:12px;padding:12px 19px;cursor:pointer;text-decoration:none;display:inline-block;text-align:center}
+.primary{background:var(--accent);color:white}.secondary{background:#f0ede8;color:var(--ink)}
+button:disabled{opacity:.45;cursor:not-allowed}
+.actions{display:flex;gap:10px;justify-content:space-between;margin-top:20px}
+.actions button{flex:1}
+.hidden{display:none!important}
+.result{text-align:center}
+.score{font-size:46px;font-weight:bold;color:var(--accent);line-height:1.4}
+.review{text-align:right;margin-top:20px}
+.review-item{padding:13px 0;border-bottom:1px solid var(--line)}
+.correct{color:var(--good);font-weight:bold}.incorrect{color:var(--bad);font-weight:bold}
+.explain{font-size:13px;color:var(--muted);margin-top:4px}
+.cta-wrap{background:#263c4a;color:#fff;text-align:center}
+.cta-wrap p{color:#e1e7e9}
+.cta{background:#f1c5a8;color:#263c4a;margin-top:8px}
+.small{font-size:12px;color:var(--muted)}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:18px}
+@media(max-width:520px){.card{padding:17px}.actions{flex-direction:column}header{padding:23px 19px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="brand">KARTO | کارتو</div>
+  <h1>چقدر به قانون کار مسلط هستید؟</h1>
+  <p>در این چالش ۵ سؤالی، دانش خود را درباره چند موضوع کاربردی قانون کار ارزیابی کنید.</p>
+  <span class="pill">۵ سؤال چهارگزینه‌ای · نتیجه فوری</span>
+</header>
+
+<section class="card" id="quiz">
+  <div class="qnum" id="qnum">سؤال ۱ از ۵</div>
+  <div class="progressline"><div id="progress"></div></div>
+  <h2 id="question"></h2>
+  <div id="options"></div>
+  <div class="actions">
+    <button class="secondary" id="back" type="button">سؤال قبلی</button>
+    <button class="primary" id="next" type="button" disabled>سؤال بعدی</button>
+  </div>
+</section>
+
+<section class="card result hidden" id="result" aria-live="polite">
+  <div class="brand" style="color:#c66b3d">KARTO | کارتو</div>
+  <h2>نتیجه آزمون شما</h2>
+  <div class="score" id="score"></div>
+  <p id="message"></p>
+  <button class="secondary" id="again" type="button">شرکت مجدد در آزمون</button>
+  <div class="review" id="review"></div>
+</section>
+
+<section class="card cta-wrap">
+  <div class="brand">KARTO | کارتو</div>
+  <h2>دانش تخصصی، راهکار کاربردی، مدیریت حرفه‌ای</h2>
+  <p>برای دریافت آموزش‌ها، تحلیل‌های قانون کار، تأمین اجتماعی و حقوق و دستمزد، به کانال کارتو بپیوندید.</p>
+  <a class="cta" href="https://ble.ir/karto_hr" target="_blank" rel="noopener">ورود به کانال کارتو</a>
+  <p class="small" style="color:#d4dcdf">ble.ir/karto_hr</p>
+</section>
+<footer>این آزمون جنبه آموزشی دارد. برای تصمیم‌گیری در پرونده‌های واقعی، متن قانون و مقررات جاری را بررسی کنید.</footer>
+</div>
+
+<script>
+const questions = [
+ {q:"ساعات کار قانونی کارگران در شرایط عادی، حداکثر چند ساعت در هفته است؟",
+  o:["۴۰ ساعت","۴۴ ساعت","۴۸ ساعت","۴۲ ساعت"],a:1,
+  e:"طبق ماده ۵۱ قانون کار، ساعات کار کارگران در هفته نباید از ۴۴ ساعت تجاوز کند."},
+ {q:"طبق ماده ۵۹ قانون کار، اضافه‌کاری در شرایط عادی با کدام شرایط مجاز است؟",
+  o:["صرفاً با دستور کارفرما","با پرداخت ۲۰ درصد اضافه بر مزد","با موافقت کارگر و پرداخت ۴۰ درصد اضافه بر مزد هر ساعت عادی","بدون نیاز به پرداخت فوق‌العاده"],a:2,
+  e:"ماده ۵۹، موافقت کارگر و پرداخت ۴۰ درصد اضافه بر مزد هر ساعت کار عادی را مقرر کرده است؛ همچنین محدودیت‌های قانونی اضافه‌کاری باید رعایت شود."},
+ {q:"مرخصی استحقاقی سالانه کارگران طبق ماده ۶۴ قانون کار، با احتساب چهار روز جمعه، چقدر است؟",
+  o:["یک ماه","۱۵ روز کاری","۲۰ روز کاری","۳۰ روز کاری بدون احتساب تعطیلات"],a:0,
+  e:"ماده ۶۴، مرخصی استحقاقی سالانه را با استفاده از مزد، جمعاً یک ماه با احتساب چهار روز جمعه تعیین کرده است."},
+ {q:"فوق‌العاده شب‌کاری برای کارگران غیرنوبتی طبق ماده ۵۸ چند درصد است؟",
+  o:["۲۰ درصد","۳۵ درصد","۴۰ درصد","۱۵ درصد"],a:1,
+  e:"طبق ماده ۵۸، برای هر ساعت کار در شب، فقط به کارگران غیرنوبتی ۳۵ درصد اضافه بر مزد ساعت کار عادی تعلق می‌گیرد."},
+ {q:"تعطیل هفتگی کارگران در حالت معمول کدام روز است؟",
+  o:["جمعه با استفاده از مزد","پنجشنبه بدون مزد","هر روز با توافق کارفرما","شنبه با استفاده از مزد"],a:0,
+  e:"طبق ماده ۶۲ قانون کار، روز جمعه، روز تعطیل هفتگی کارگران با استفاده از مزد است؛ البته در برخی فعالیت‌ها ترتیبات خاصی برای تعطیل هفتگی وجود دارد."}
+];
+let current=0, answers=Array(questions.length).fill(null);
+const $=id=>document.getElementById(id);
+function render(){
+ const q=questions[current]; $("qnum").textContent=`سؤال ${current+1} از ${questions.length}`;
+ $("progress").style.width=`${(current/questions.length)*100}%`;
+ $("question").textContent=q.q; $("options").innerHTML="";
+ q.o.forEach((opt,i)=>{
+  const label=document.createElement("label");label.className="option";
+  const input=document.createElement("input");input.type="radio";input.name="answer";input.value=i;input.checked=answers[current]===i;
+  input.addEventListener("change",()=>{answers[current]=i;updateButtons()});
+  const span=document.createElement("span");span.textContent=opt;
+  label.append(input,span);$("options").append(label);
+ });
+ $("back").disabled=current===0;
+ $("next").textContent=current===questions.length-1?"مشاهده نتیجه":"سؤال بعدی";
+ updateButtons();
+}
+function updateButtons(){$("next").disabled=answers[current]===null}
+function finish(){
+ const score=answers.reduce((n,a,i)=>n+(a===questions[i].a?1:0),0);
+ $("quiz").classList.add("hidden");$("result").classList.remove("hidden");
+ $("score").textContent=`${score} از ۵`;
+ $("message").textContent=score===5?"عالی! پاسخ‌های شما کاملاً صحیح بود.":score>=3?"خوب است؛ با مرور توضیحات می‌توانید تسلط خود را بیشتر کنید.":"این آزمون فرصت خوبی برای مرور نکات مهم قانون کار است.";
+ $("progress").style.width="100%";
+ $("review").innerHTML="<h2>پاسخ‌های تشریحی</h2>";
+ questions.forEach((q,i)=>{
+  const div=document.createElement("div");div.className="review-item";
+  const status=document.createElement("div");status.className=answers[i]===q.a?"correct":"incorrect";
+  status.textContent=`سؤال ${i+1}: ${answers[i]===q.a?"پاسخ شما صحیح است":"پاسخ صحیح: "+q.o[q.a]}`;
+  const explanation=document.createElement("div");explanation.className="explain";explanation.textContent=q.e;
+  div.append(status,explanation);$("review").append(div);
+ });
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+$("back").addEventListener("click",()=>{if(current>0){current--;render()}});
+$("next").addEventListener("click",()=>{if(current<questions.length-1){current++;render()}else finish()});
+$("again").addEventListener("click",()=>{current=0;answers=Array(questions.length).fill(null);$("result").classList.add("hidden");$("quiz").classList.remove("hidden");render();window.scrollTo({top:0,behavior:"smooth"})});
+render();
+</script>
+</body>
+</html>
